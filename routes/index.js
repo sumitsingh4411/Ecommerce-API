@@ -1,0 +1,21 @@
+const express = require('express');
+const loginController = require('../controller/auth/loginController');
+const Mydata = require('../controller/auth/Mydata');
+const refresh = require('../controller/auth/refresh');
+const RegisterController = require('../controller/auth/ReginsterController');
+const Product = require('../controller/product/Product');
+const admin = require('../middleware/admin');
+const auth = require('../middleware/auth');
+const router = express.Router();
+
+router.post('/register', RegisterController.register);
+router.post('/login', loginController.login);
+router.get('/me', auth, Mydata.me);
+router.post('/refresh', refresh.refreshTToken);
+router.post('/logout', auth, loginController.logout);
+router.post('/products', [auth, admin], Product.addproduct);
+router.put('/products/:id', [auth, admin], Product.updateproduct);
+router.delete('/products/:id', [auth, admin], Product.deleteproduct);
+router.get('/products', Product.all);
+router.get('/products/:id', Product.getone);
+module.exports = router;
